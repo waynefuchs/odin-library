@@ -11,6 +11,11 @@ Library.prototype.addBook = function(book) {
 Library.prototype.getAllBooks = function() {
     return this.listOfBooks;
 }
+Library.prototype.deleteBook = function(title) {
+    ui_ClearLibrary();
+    this.listOfBooks = this.listOfBooks.filter(book => book.title !== title);
+    ui_PopulateLibrary();
+}
 
 
 /* Book Object */
@@ -39,12 +44,22 @@ Book.prototype.getCard = function() {
 
     // Pages
     let elementPages = document.createElement('p');
-    elementPages.textContent = this.pages;
+    elementPages.classList.add('page-count');
+    elementPages.textContent = `${this.pages} pages`;
+
+    // Button
+    let elementDelete = document.createElement('input');
+    elementDelete.type = "image";
+    elementDelete.src = "svg/delete_FILL0_wght400_GRAD0_opsz24.svg";
+    elementDelete.classList.add('delete');
+    elementDelete.dataset.title = this.title;
+    elementDelete.addEventListener('click', ui_DeleteBookButtonClicked);
 
     // Add all the elements and return
     div.append(elementTitle);
     div.append(elementAuthor);
     div.append(elementPages);
+    div.append(elementDelete);
     return div;
 }
 
@@ -54,6 +69,7 @@ Book.prototype.getCard = function() {
 const ui = {
     addBookButton: document.querySelector('#add-book'),
     addBookModal: document.querySelector('#new-book-modal'),
+    fadeScreen: document.querySelector('#fade-screen'),
     library: document.querySelector('#library'),
 }
 function ui_ClearLibrary() {
@@ -67,11 +83,27 @@ function ui_PopulateLibrary() {
         ui.library.append(book.getCard());
     }
 }
+function ui_isAddBookModalVisible() {
+    return ui.addBookModal.classList.contains('active');
+}
+const ui_DeleteBookButtonClicked = function(e) {
+    library.deleteBook(this.dataset.title);
+}
 const ui_AddButtonClicked = function() {
     ui.addBookModal.classList.toggle('active');
+    ui.fadeScreen.style.visibility = ui_isAddBookModalVisible()
+            ? 'visible'
+            : 'hidden';
+}
+const ui_KeyboardHandler = function(e) {
+    if(e.key == "Escape" && ui_isAddBookModalVisible()) {
+        ui_AddButtonClicked();
+    }
 }
 function ui_init_events() {
     ui.addBookButton.addEventListener('click', ui_AddButtonClicked);
+    ui.fadeScreen.addEventListener('click', ui_AddButtonClicked);
+    document.addEventListener('keydown', ui_KeyboardHandler);
 } ui_init_events();
 
 
@@ -88,7 +120,7 @@ function initialize() {
         "J.R.R. Tolkien", 435, true));
     library.addBook(new Book(
         "Holes", 
-        "Louis Sachar", 222, true));
+        "Louis Sachar", 222, false));
     library.addBook(new Book(
         "Watership Down", 
         "Richard Adams", 543, true));

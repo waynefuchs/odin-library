@@ -5,16 +5,33 @@
     --c-accent2: #1992d4;
     --c-bg1: lightgray;
     --c-bg2: gray;
+    --c-read: rgb(194, 175, 175);
+    --c-not-read: rgb(175, 194, 176);
     --c-light: white;
-    --c-shadow: rgba(180, 180, 180, 1);
+    --c-shadow: rgba(0, 0, 0, 0.5);
 
     --standard-gap: 15px;
 
     font-family: Roboto, sans-serif;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    /* disable selection */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror */
+    -moz-user-select: none; /* Old version of Firefox */
+    -ms-user-select: none; /* Internet Explorer or Edge */
+    user-select: none; /* All modern browsers */
+}
+
 body {
     background-color: var(--c-bg1);
+    padding: 60px;
 }
 
 .library {
@@ -28,8 +45,59 @@ body {
     background-color: var(--c-light);
     padding: var(--standard-gap);
     border-radius: var(--standard-gap);
-    box-shadow: 3px 3px 15px var(--c-shadow);
+    box-shadow: 3px 3px 3px var(--c-shadow);
+    display: grid;
+    grid-template-columns: 2fr 1fr;
 }
+.card>h2 {
+    grid-column: 1 / -1;
+}
+.card>.page-count {
+    text-align: right;
+}
+.read {
+    background-color: var(--c-read);
+}
+.not-read {
+    background-color: var(--c-not-read);
+}
+
+
+/* UI */
+button {
+    padding: 10px 25px;
+    border-radius: 15px;
+    outline: none;
+    border: none;
+    margin-bottom: var(--standard-gap)
+}
+.delete:hover,
+button:hover {
+    background-color: var(--c-accent2);
+}
+.delete:active,
+button:active {
+    background-color: var(--c-accent1);
+}
+/* button::before {
+    position: relative;
+    content: url("svg/add_FILL0_wght400_GRAD0_opsz24.svg");
+    right: 10px;
+    top: 0px;
+} */
+
+.delete {
+    margin-top: var(--standard-gap);
+    border-radius: 15px;
+}
+
+input {
+    background-color: var(--c-bg1);
+    padding: var(--standard-gap);
+    outline: none;
+    border: none;
+}
+
 
 /* MODAL */
 .modal {
@@ -47,6 +115,7 @@ body {
   }
   .modal>label {
     justify-self: end;
+    align-self: center;
   }
   .modal>div {
     grid-column: 1 / -1;
@@ -54,4 +123,13 @@ body {
   }
   .modal.active {
     transform: translate(-50%, -50%) scale(1);
+  }
+  .fade {
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    position: absolute;
+    background-color: rgba(50, 50, 50, 0.8);
+    width: 100vw;
+    height: 100vh;
   }
