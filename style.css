@@ -5,8 +5,8 @@
     --c-accent2: #1992d4;
     --c-bg1: lightgray;
     --c-bg2: gray;
-    --c-read: rgb(194, 175, 175);
-    --c-not-read: rgb(175, 194, 176);
+    --c-read: rgb(175, 194, 176);
+    --c-not-read: rgb(194, 175, 175);
     --c-light: white;
     --c-shadow: rgba(0, 0, 0, 0.5);
 
@@ -41,6 +41,7 @@ body {
 
 }
 
+.book-card,
 .card {
     background-color: var(--c-light);
     padding: var(--standard-gap);
@@ -49,17 +50,17 @@ body {
     display: grid;
     grid-template-columns: 2fr 1fr;
 }
-.card>h2 {
+.book-card {
+    background-color: var(--c-not-read);
+}
+.book-card>h2 {
     grid-column: 1 / -1;
 }
-.card>.page-count {
+.book-card>.page-count {
     text-align: right;
 }
 .read {
     background-color: var(--c-read);
-}
-.not-read {
-    background-color: var(--c-not-read);
 }
 
 
@@ -71,11 +72,11 @@ button {
     border: none;
     margin-bottom: var(--standard-gap)
 }
-.delete:hover,
+.card-button:hover,
 button:hover {
     background-color: var(--c-accent2);
 }
-.delete:active,
+.card-button:active,
 button:active {
     background-color: var(--c-accent1);
 }
@@ -86,8 +87,9 @@ button:active {
     top: 0px;
 } */
 
-.delete {
+.card-button {
     margin-top: var(--standard-gap);
+    margin-right: var(--standard-gap);
     border-radius: 15px;
 }
 
