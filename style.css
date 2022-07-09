@@ -37,8 +37,14 @@ body {
 }
 
 header {
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 3px 3px 3px var(--c-shadow);
+    background-color: var(--c-light);
     display: grid;
     grid-template-columns: 5fr minmax(75px, 10rem);
+    margin-bottom: var(--standard-gap);
+    align-items: center;
 }
 
 .library {
@@ -78,6 +84,9 @@ button {
     outline: none;
     border: none;
     margin-bottom: var(--standard-gap)
+}
+button#add-book-modal {
+    margin-bottom: 0;
 }
 .card-button:hover,
 button:hover {
