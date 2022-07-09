@@ -1,24 +1,19 @@
-function Library(selector) {
-    this.element = document.querySelector(selector);
-    if(this.element === null) console.error(`Failed to select library element: '${selector}'`);
-    this.library = []
+let library = new Library();
+
+
+/* Library Object */
+function Library() {
+    this.listOfBooks = []
 }
 Library.prototype.addBook = function(book) {
-    this.library.push(book);
+    this.listOfBooks.push(book);
 }
-Library.prototype.clearUI = function() {
-    while (this.element.firstChild) {
-        this.element.removeChild(this.element.lastChild);
-    }
-}
-Library.prototype.populateUI = function() {
-    this.clearUI();
-    for(book of this.library) {
-        this.element.append(book.getCard());
-    }
+Library.prototype.getAllBooks = function() {
+    return this.listOfBooks;
 }
 
 
+/* Book Object */
 function Book(title, author, pages, hasRead=false) {
     this.title = title;
     this.author = author;
@@ -53,20 +48,49 @@ Book.prototype.getCard = function() {
     return div;
 }
 
-let library = new Library('#library');
-library.addBook(new Book(
-    "Lord of the Rings", 
-    "J.R.R. Tolkien", 295, true));
-library.addBook(new Book(
-    "The Giver", 
-    "Lois Lowry", 277, true));
-library.addBook(new Book(
-    "The Hobbit", 
-    "J.R.R. Tolkien", 435, true));
-library.addBook(new Book(
-    "Holes", 
-    "Louis Sachar", 222, true));
-library.addBook(new Book(
-    "Watership Down", 
-    "Richard Adams", 543, true));
-library.populateUI();
+
+
+/* UI */
+const ui = {
+    addBookButton: document.querySelector('#add-book'),
+    addBookModal: document.querySelector('#new-book-modal'),
+    library: document.querySelector('#library'),
+}
+function ui_ClearLibrary() {
+    while (ui.library.firstChild) {
+        ui.library.removeChild(ui.library.lastChild);
+    }
+}
+function ui_PopulateLibrary() {
+    ui_ClearLibrary();
+    for(book of library.getAllBooks()) {
+        ui.library.append(book.getCard());
+    }
+}
+const ui_AddButtonClicked = function() {
+    ui.addBookModal.classList.toggle('active');
+}
+function ui_init_events() {
+    ui.addBookButton.addEventListener('click', ui_AddButtonClicked);
+} ui_init_events();
+
+
+initialize();
+function initialize() {
+    library.addBook(new Book(
+        "Lord of the Rings", 
+        "J.R.R. Tolkien", 295, true));
+    library.addBook(new Book(
+        "The Giver", 
+        "Lois Lowry", 277, true));
+    library.addBook(new Book(
+        "The Hobbit", 
+        "J.R.R. Tolkien", 435, true));
+    library.addBook(new Book(
+        "Holes", 
+        "Louis Sachar", 222, true));
+    library.addBook(new Book(
+        "Watership Down", 
+        "Richard Adams", 543, true));
+    ui_PopulateLibrary();
+}
