@@ -36,6 +36,11 @@ body {
     padding: 60px;
 }
 
+header {
+    display: grid;
+    grid-template-columns: 5fr minmax(75px, 10rem);
+}
+
 .library {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
