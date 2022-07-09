@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400;1,6..72,700&display=swap');
+
+:root {
+    --c-accent1: #facc15;
+    --c-accent2: #1992d4;
+    --c-bg1: lightgray;
+    --c-bg2: gray;
+    --c-light: white;
+    --c-shadow: rgba(180, 180, 180, 1);
+
+    --standard-gap: 15px;
+
+    font-family: Roboto, sans-serif;
+}
+
+body {
+    background-color: var(--c-bg1);
+}
+
+.library {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--standard-gap);
+
+}
+
+.card {
+    background-color: var(--c-light);
+    padding: var(--standard-gap);
+    border-radius: var(--standard-gap);
+    box-shadow: 3px 3px 15px var(--c-shadow);
+}
+
+/* MODAL */
+.modal {
+    position: fixed;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 0.2s ease-in-out;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--standard-gap);
+  }
+  .modal>label {
+    justify-self: end;
+  }
+  .modal>div {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+  .modal.active {
+    transform: translate(-50%, -50%) scale(1);
+  }
