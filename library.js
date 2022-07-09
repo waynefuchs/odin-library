@@ -11,15 +11,18 @@ Library.prototype.getAllBooks = function() {
     return this.listOfBooks;
 }
 Library.prototype.deleteBook = function(id) {
-    ui_ClearLibrary();
     this.listOfBooks = this.listOfBooks.filter(book => book.id != id);
-    ui_PopulateLibrary();
+    this.reloadUI();
 }
 Library.prototype.toggleReadStatus = function(id) {
     const matchingBooks = this.listOfBooks.filter(book => book.id == id);
     for(book of matchingBooks) {
         book.toggleReadStatus();
     }
+}
+Library.prototype.reloadUI = function() {
+    ui_ClearLibrary();
+    ui_PopulateLibrary();
 }
 
 
@@ -116,6 +119,7 @@ Book.prototype.getCard = function() {
 /* UI */
 const ui = {
     addBookButton: document.querySelector('#add-book'),
+    addBookModalButton: document.querySelector('#add-book-modal'),
     addBookModal: document.querySelector('#new-book-modal'),
     fadeScreen: document.querySelector('#fade-screen'),
     library: document.querySelector('#library'),
@@ -140,7 +144,21 @@ const ui_DeleteBookButtonClicked = function(e) {
 const ui_ToggleReadStatusButtonClicked = function(e) {
     library.toggleReadStatus(this.dataset.id);
 }
-const ui_AddButtonClicked = function() {
+const ui_AddBookButtonClicked = function(e) {
+    // create a book
+    book = new Book(title.value, author.value, pages.value, read.checked);
+    // add it to the library
+    library.addBook(book);
+    // clear the modal for the next book
+    title.value = "";
+    author.value = "";
+    pages.value = "";
+    read.checked = false;
+    // reset the ui
+    library.reloadUI();
+    ui_AddBookModalButtonClicked();
+}
+const ui_AddBookModalButtonClicked = function() {
     ui.addBookModal.classList.toggle('active');
     ui.fadeScreen.style.visibility = ui_isAddBookModalVisible()
             ? 'visible'
@@ -148,12 +166,13 @@ const ui_AddButtonClicked = function() {
 }
 const ui_KeyboardHandler = function(e) {
     if(e.key == "Escape" && ui_isAddBookModalVisible()) {
-        ui_AddButtonClicked();
+        ui_AddBookModalButtonClicked();
     }
 }
 function ui_init_events() {
-    ui.addBookButton.addEventListener('click', ui_AddButtonClicked);
-    ui.fadeScreen.addEventListener('click', ui_AddButtonClicked);
+    ui.addBookButton.addEventListener('click', ui_AddBookButtonClicked);
+    ui.addBookModalButton.addEventListener('click', ui_AddBookModalButtonClicked);
+    ui.fadeScreen.addEventListener('click', ui_AddBookModalButtonClicked);
     document.addEventListener('keydown', ui_KeyboardHandler);
 } ui_init_events();
 

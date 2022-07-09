@@ -9,6 +9,8 @@
     --c-not-read: rgb(194, 175, 175);
     --c-light: white;
     --c-shadow: rgba(0, 0, 0, 0.5);
+    --c-valid: rgb(175, 194, 176);
+    --c-invalid: rgb(194, 175, 175);
 
     --standard-gap: 15px;
 
@@ -99,6 +101,12 @@ input {
     outline: none;
     border: none;
 }
+input:valid {
+    background-color: var(--c-valid);
+}
+input:invalid {
+    background-color: var(--c-invalid);
+}
 
 
 /* MODAL */
@@ -114,16 +122,17 @@ input {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: var(--standard-gap);
-  }
-  .modal>label {
+}
+.modal>label {
     justify-self: end;
     align-self: center;
-  }
-  .modal>div {
+}
+.modal>button,
+.modal>div {
     grid-column: 1 / -1;
     justify-self: center;
-  }
-  .modal.active {
+}
+.modal.active {
     transform: translate(-50%, -50%) scale(1);
   }
   .fade {
