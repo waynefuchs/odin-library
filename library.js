@@ -161,7 +161,21 @@ const ui_DeleteBookButtonClicked = function(e) {
 const ui_ToggleReadStatusButtonClicked = function(e) {
     library.toggleReadStatus(this.dataset.id);
 }
+const validateElement = (element) => {
+    if(element.validity.valueMissing) {
+        element.setCustomValidity('Field must not be empty!');
+        element.reportValidity();
+    } else {
+        element.setCustomValidity('');
+        return true;
+    }
+    return false;
+}
+const validateBookInput = () => {
+    return [title, author, pages].every(element => validateElement(element));
+};
 const ui_AddBookButtonClicked = function(e) {
+    if(!validateBookInput()) return;
     // create a book
     book = new Book(idSystem.getNextID(), title.value, author.value, pages.value, read.checked);
     // add it to the library
