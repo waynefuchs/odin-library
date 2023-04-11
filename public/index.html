@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Library</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="scripts/library.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Library</h1>
+      <button id="add-book-modal">Add Book</button>
+    </header>
+
+    <section id="library" class="library"></section>
+
+    <!-- Hidden Modal Elements -->
+    <div class="fade" id="fade-screen"></div>
+    <div class="modal card" id="new-book-modal">
+      <label for="title">Title</label>
+      <input type="text" name="title" id="title" required />
+
+      <label for="author">Author</label>
+      <input type="text" name="author" id="author" required />
+
+      <label for="pages">Pages</label>
+      <input type="number" name="pages" id="pages" required />
+
+      <div class="checkbox">
+        <label for="read">Have you read it?</label>
+        <input type="checkbox" name="read" id="read" />
+      </div>
+
+      <button id="add-book">Add Book</button>
+    </div>
+  </body>
+</html>
