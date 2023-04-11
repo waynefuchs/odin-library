@@ -1,27 +1,11 @@
 import Library from "./library";
 
-/* UI */
-/* This is spaghetti, and (now) I know it. */
 var UI = (function () {
   const libraryContainerElement = document.querySelector("#library"); // A link to the container element that holds all books
   const addBookButton = document.querySelector("#add-book"); // The button to write the new book to the db
   const createBookButton = document.querySelector("#create-book-button"); // The "Create Book" button to open the modal
   const createBookModal = document.querySelector("#create-book-modal"); // The model that is opened
   const fadeScreen = document.querySelector("#fade-screen"); // A transition element to facilitate the fade in effect
-
-  // const ui_PopulateLibrary = () => {
-  //   ui_ClearLibrary();
-  //   library.getAllBooks();
-  // };
-
-  const ui_isAddBookModalVisible = () => {
-    return createBookModal.classList.contains("active");
-  };
-
-  const ui_ToggleReadStatusButtonClicked = (e) => {
-    console.error("toggle read status button clicked :: broken");
-    // libraryContainerElement.toggleReadStatus(this.dataset.id);
-  };
 
   const validateElement = (element) => {
     if (element.validity.valueMissing) {
@@ -55,27 +39,9 @@ var UI = (function () {
     pages.value = "";
     read.checked = false;
 
-    // reset the ui
-    // libraryContainerElement.reloadUI();
-    addBookModalButtonClicked();
+    // close the modal
+    addBookModalClickEvent();
   };
-
-  const addBookModalButtonClicked = () => {
-    createBookModal.classList.toggle("active");
-    fadeScreen.style.visibility = ui_isAddBookModalVisible()
-      ? "visible"
-      : "hidden";
-  };
-
-  const keyboardHandler = (e) => {
-    if (e.key == "Escape" && ui_isAddBookModalVisible()) {
-      addBookModalButtonClicked();
-    }
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////
-  // Code after this point has been rewritten (APRIL 11 2023)
 
   const removeBook = (id) => {
     const book = document.getElementById(id);
@@ -88,11 +54,50 @@ var UI = (function () {
   //     libraryContainerElement.removeChild(libraryContainerElement.lastChild);
   // };
 
-  //here
-
+  // Click Event Handling
   const deleteBookClickEvent = (e) => Library.deleteBook(e.target.dataset.id);
+  const hasReadClickEvent = (e) => Library.toggleHasRead(e.target.dataset.id);
+  const addBookModalClickEvent = () => {
+    createBookModal.classList.toggle("active");
+    fadeScreen.style.visibility = isAddBookModalVisible()
+      ? "visible"
+      : "hidden";
+  };
 
-  const uiDisplayBook = (book) => {
+  // Keyboard Event Handling
+  const keyboardHandler = (e) => {
+    if (e.key == "Escape" && isAddBookModalVisible()) {
+      addBookModalClickEvent();
+    }
+  };
+
+  // Attach click and keyboard listeners to their respective HTML elements
+  const initializeEvents = () => {
+    createBookButton.addEventListener("click", addBookModalClickEvent);
+    addBookButton.addEventListener("click", addBookButtonClicked);
+    fadeScreen.addEventListener("click", addBookModalClickEvent);
+    document.addEventListener("keydown", keyboardHandler);
+  };
+
+  // Check if modal is visible
+  const isAddBookModalVisible = () => {
+    return createBookModal.classList.contains("active");
+  };
+
+  // Return true if ui "hasRead" is set
+  const hasRead = (id) =>
+    document.getElementById(id).classList.contains("read") ? true : false;
+
+  const replaceBook = (id, book) => {
+    const oldBook = document.getElementById(id);
+    const newBook = createBook(book);
+    oldBook.after(newBook);
+    while (oldBook.firstChild) oldBook.removeChild(oldBook.lastChild);
+    oldBook.remove();
+  };
+
+  // Generate book card HTML
+  const createBook = (book) => {
     // Containing div
     let div = document.createElement("div");
     div.id = book.id;
@@ -132,7 +137,7 @@ var UI = (function () {
     elementRead.classList.add("card-button");
     elementRead.classList.add("read-button");
     elementRead.dataset.id = book.id;
-    elementRead.addEventListener("click", ui_ToggleReadStatusButtonClicked);
+    elementRead.addEventListener("click", hasReadClickEvent);
 
     // Assemble the buttons
     buttonContainer.append(elementDelete);
@@ -144,18 +149,16 @@ var UI = (function () {
     div.append(elementPages);
     div.append(buttonContainer);
 
-    // Add the book to the library
+    // return the result
+    return div;
+  };
+
+  const displayBook = (book) => {
+    const div = createBook(book);
     document.getElementById("library").append(div);
   };
 
-  // Add click and keyboard listeners to UI
-  const initializeEvents = () => {
-    createBookButton.addEventListener("click", addBookModalButtonClicked);
-    addBookButton.addEventListener("click", addBookButtonClicked);
-    fadeScreen.addEventListener("click", addBookModalButtonClicked);
-    document.addEventListener("keydown", keyboardHandler);
-  };
-
-  return { initializeEvents, uiDisplayBook, removeBook };
+  // Public access
+  return { initializeEvents, displayBook, removeBook, replaceBook };
 })(UI || {});
 export default UI;
