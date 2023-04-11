@@ -10,9 +10,11 @@ const rootConfig = {
 
 const appConfig = {
   ...rootConfig,
-  entry: "./src/library.js",
+  entry: {
+    index: "./src/index.js",
+  },
   output: {
-    filename: "library.js",
+    filename: "library.bundle.js",
     path: path.resolve(__dirname, "public/scripts"),
   },
 };
